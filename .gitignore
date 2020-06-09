@@ -1,0 +1,9 @@
+# virtualenv
+datify-env/
+
+# Finder stuff
+.DS_Store
+
+## pycache
+*__pycache__/
+*.pyc
