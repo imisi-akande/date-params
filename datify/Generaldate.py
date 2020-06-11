@@ -1,29 +1,32 @@
 import datetime
+import dateparser
 
 class Datify:
     """General date class for date watch"""
     def __init__(self):
         pass
 
-    def calculate_age(self, year, month, day):
+    def calculate_years(self, date_one, date_two=None):
         """ Args:
-            year(int)
-            month(int)
-            day(int)
+            date_one(string)
+            date_two(string)
 
         Attributes:
-            year(int) representing the year section of an input date
-            month(int) representing the month section of an input date
-            day(int) representing the day section of an input date
+            date_one(string) representing the first input date
+            date_two(string) representing the second input date
         """
+        self.date_one = dateparser.parse(date_one)
+        self.date_two = dateparser.parse(date_two) if date_two else None
 
-        if all(isinstance(i, int) for i in [year, month, day]):
-            self.year = int(year)
-            self.month = int(month)
-            self.day = int(day)
+        if self.date_one and self.date_two:
+            dates = [self.date_one, self.date_two]
+            self.date_one = max(dates)
+            self.date_two = min(dates)
+            new_date = round(abs((self.date_one - self.date_two).days/365.25))
+        elif self.date_one and not date_two:
             current_date = datetime.datetime.now()
-            input_date = datetime.datetime(self.year, self.month, self.day)
-            new_date = round((abs(current_date - input_date).days/365.25))
-            return new_date
+            new_date = round(abs((current_date - self.date_one).days/365.25))
         else:
             raise ValueError("Incorrect input date type")
+
+        return new_date
